@@ -8,3 +8,7 @@ type IPersonRepository interface {
 	GetAllPerson() ([]model.Person, error)
 	SavePerson(person model.Person) error
 }
+
+type IProductRepository interface {
+	GetAllProduct() (products []model.Product, err error)
+}

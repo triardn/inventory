@@ -130,6 +130,7 @@ func InitApp() {
 
 	r := mux.NewRouter()
 
+	r.Handle("/products", handler.HttpHandler{logger, urlHandler.GetAllProduct}).Methods(http.MethodGet)
 	r.HandleFunc("/health_check", urlHandler.HealthCheck).Methods(http.MethodGet)
 
 	n := negroni.Classic()
@@ -169,18 +170,24 @@ func WiringUpService(repository *repository.Repository, cache *redis.Pool, logge
 	personService := service.NewPersonService(repository.Person, logger)
 	svc.SetPersonService(personService)
 
+	productService := service.NewProductService(repository.Product, logger)
+	svc.SetProductService(productService)
+
 	return svc, nil
 }
 
 func WiringUpRepository(db *gorm.DB, cache *redis.Pool, logger *common.APILogger, appConfig *config.Config) *repository.Repository {
 	repo := repository.NewRepository()
 
-	// option := repository.RepositoryOption{
-	// 	DB:        db,
-	// 	Cache:     cache,
-	// 	Logger:    logger,
-	// 	AppConfig: appConfig,
-	// }
+	option := repository.RepositoryOption{
+		DB:        db,
+		Cache:     cache,
+		Logger:    logger,
+		AppConfig: appConfig,
+	}
+
+	productRepo := repository.NewProductRepository(option)
+	repo.SetProductRepository(productRepo)
 
 	return repo
 }

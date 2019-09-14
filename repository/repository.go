@@ -16,7 +16,8 @@ type RepositoryOption struct {
 }
 
 type Repository struct {
-	Person         IPersonRepository
+	Person  IPersonRepository
+	Product IProductRepository
 }
 
 func NewRepository() *Repository {
@@ -25,4 +26,8 @@ func NewRepository() *Repository {
 
 func (r *Repository) SetPersonRepository(personRepository IPersonRepository) {
 	r.Person = personRepository
+}
+
+func (r *Repository) SetProductRepository(productRepository IProductRepository) {
+	r.Product = productRepository
 }
