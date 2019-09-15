@@ -17,8 +17,10 @@ type ServiceOption struct {
 }
 
 type Service struct {
-	Person  IPersonService
-	Product IProductService
+	Person      IPersonService
+	Product     IProductService
+	Order       IOrderService
+	OrderDetail IOrderDetailService
 }
 
 func NewService() *Service {
@@ -31,4 +33,12 @@ func (s *Service) SetPersonService(ps IPersonService) {
 
 func (s *Service) SetProductService(prs IProductService) {
 	s.Product = prs
+}
+
+func (s *Service) SetOrderService(os IOrderService) {
+	s.Order = os
+}
+
+func (s *Service) SetOrderDetailService(ods IOrderDetailService) {
+	s.OrderDetail = ods
 }

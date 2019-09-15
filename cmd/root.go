@@ -175,6 +175,12 @@ func WiringUpService(repository *repository.Repository, cache *redis.Pool, logge
 	productService := service.NewProductService(repository.Product, logger)
 	svc.SetProductService(productService)
 
+	orderService := service.NewOrderService(repository.Order, logger)
+	svc.SetOrderService(orderService)
+
+	orderDetailService := service.NewOrderDetailService(repository.OrderDetail, logger)
+	svc.SetOrderDetailService(orderDetailService)
+
 	return svc, nil
 }
 
