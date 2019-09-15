@@ -191,5 +191,11 @@ func WiringUpRepository(db *gorm.DB, cache *redis.Pool, logger *common.APILogger
 	productRepo := repository.NewProductRepository(option)
 	repo.SetProductRepository(productRepo)
 
+	orderRepo := repository.NewOrderRepository(option)
+	repo.SetOrderRepository(orderRepo)
+
+	orderDetailRepo := repository.NewOrderDetailRepository(option)
+	repo.SetOrderDetailRepository(orderDetailRepo)
+
 	return repo
 }

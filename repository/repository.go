@@ -16,8 +16,10 @@ type RepositoryOption struct {
 }
 
 type Repository struct {
-	Person  IPersonRepository
-	Product IProductRepository
+	Person      IPersonRepository
+	Product     IProductRepository
+	Order       IOrderRepository
+	OrderDetail IOrderDetailRepository
 }
 
 func NewRepository() *Repository {
@@ -30,4 +32,12 @@ func (r *Repository) SetPersonRepository(personRepository IPersonRepository) {
 
 func (r *Repository) SetProductRepository(productRepository IProductRepository) {
 	r.Product = productRepository
+}
+
+func (r *Repository) SetOrderRepository(orderRepository IOrderRepository) {
+	r.Order = orderRepository
+}
+
+func (r *Repository) SetOrderDetailRepository(orderDetailRepository IOrderDetailRepository) {
+	r.OrderDetail = orderDetailRepository
 }
