@@ -17,6 +17,8 @@ func NewOrderDetailRepository(option RepositoryOption) *OrderDetailRepository {
 
 func (odr *OrderDetailRepository) GetAllOrderDetail() (orderDetails []model.OrderDetail, err error) {
 	err = odr.DB.
+		Preload("Order").
+		Preload("Product").
 		Find(&orderDetails).
 		Error
 	if err != nil {

@@ -18,6 +18,10 @@ func NewOrderDetailService(orderRepository repository.IOrderDetailRepository, lo
 	return orderService
 }
 
+func (ods *OrderDetailService) GetAllOrderDetail() (orderDetails []model.OrderDetail, err error) {
+	return ods.repository.GetAllOrderDetail()
+}
+
 func (ods *OrderDetailService) GetDetailByOrderID(orderID uint64) (orderDetails []model.OrderDetail, err error) {
 	return ods.repository.GetDetailByOrderID(orderID)
 }

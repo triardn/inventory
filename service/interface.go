@@ -22,5 +22,6 @@ type IOrderService interface {
 }
 
 type IOrderDetailService interface {
+	GetAllOrderDetail() (orderDetails []model.OrderDetail, err error)
 	GetDetailByOrderID(orderID uint64) (orderDetails []model.OrderDetail, err error)
 }

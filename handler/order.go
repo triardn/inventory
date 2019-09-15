@@ -24,6 +24,8 @@ type OrderDetail struct {
 	Price    uint64 `json:"price"`
 	Quantity uint64 `json:"quantity"`
 	Total    uint64 `json:"total"`
+	Notes    string `json:"notes,omitempty"`
+	Created  uint64 `json:"created,omitempty"`
 }
 
 func (h *Handler) GetAllOrder(w http.ResponseWriter, r *http.Request) (hErr error) {
