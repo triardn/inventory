@@ -28,6 +28,7 @@ func (odr *OrderDetailRepository) GetAllOrderDetail() (orderDetails []model.Orde
 
 func (odr *OrderDetailRepository) GetDetailByOrderID(orderID uint64) (orderDetails []model.OrderDetail, err error) {
 	err = odr.DB.
+		Preload("Product").
 		Where("order_id = ?", orderID).
 		Find(&orderDetails).
 		Error

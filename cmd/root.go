@@ -19,6 +19,7 @@ import (
 	"github.com/triardn/inventory/config"
 	"github.com/triardn/inventory/driver"
 	"github.com/triardn/inventory/handler"
+	"github.com/triardn/inventory/middleware"
 	"github.com/triardn/inventory/repository"
 	"github.com/triardn/inventory/service"
 	"github.com/urfave/negroni"
@@ -129,10 +130,17 @@ func InitApp() {
 	urlHandler := handler.NewHandler(service)
 
 	r := mux.NewRouter()
+	r.Use(middleware.CommonHeaderMiddleware)
 
+	// product
 	r.Handle("/products", handler.HttpHandler{logger, urlHandler.GetAllProduct}).Methods(http.MethodGet)
 	r.Handle("/products/{id}", handler.HttpHandler{logger, urlHandler.GetProductDetail}).Methods(http.MethodGet)
 	r.Handle("/products/{id}", handler.HttpHandler{logger, urlHandler.UpdateProduct}).Methods(http.MethodPut)
+
+	// order
+	r.Handle("/orders", handler.HttpHandler{logger, urlHandler.GetAllOrder}).Methods(http.MethodGet)
+	r.Handle("/orders/{id}", handler.HttpHandler{logger, urlHandler.GetOrderByID}).Methods(http.MethodGet)
+
 	r.HandleFunc("/health_check", urlHandler.HealthCheck).Methods(http.MethodGet)
 
 	n := negroni.Classic()

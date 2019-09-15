@@ -11,7 +11,7 @@ type Order struct {
 	Invoice string `gorm:"column:invoice"`
 	Total   uint64 `gorm:"column:total"`
 	Notes   string `gorm:"column:notes"`
-	created uint64 `gorm:"column:created"`
+	Created uint64 `gorm:"column:created"`
 }
 
 // TableName alisa name for order
