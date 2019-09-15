@@ -134,6 +134,7 @@ func InitApp() {
 
 	// product
 	r.Handle("/products", handler.HttpHandler{logger, urlHandler.GetAllProduct}).Methods(http.MethodGet)
+	r.Handle("/products", handler.HttpHandler{logger, urlHandler.CreateProduct}).Methods(http.MethodPost)
 	r.Handle("/products/{id}", handler.HttpHandler{logger, urlHandler.GetProductDetail}).Methods(http.MethodGet)
 	r.Handle("/products/{id}", handler.HttpHandler{logger, urlHandler.UpdateProduct}).Methods(http.MethodPut)
 
@@ -143,6 +144,14 @@ func InitApp() {
 
 	// order detail
 	r.Handle("/order-details", handler.HttpHandler{logger, urlHandler.GetAllOrderDetail}).Methods(http.MethodGet)
+
+	// restock
+	r.Handle("/restocks", handler.HttpHandler{logger, urlHandler.GetAllRestock}).Methods(http.MethodGet)
+	r.Handle("/restocks", handler.HttpHandler{logger, urlHandler.CreateRestockData}).Methods(http.MethodPost)
+
+	// product sold
+	r.Handle("/solds", handler.HttpHandler{logger, urlHandler.GetAllSoldProduct}).Methods(http.MethodGet)
+	r.Handle("/solds", handler.HttpHandler{logger, urlHandler.CreateSoldProductData}).Methods(http.MethodPost)
 
 	r.HandleFunc("/health_check", urlHandler.HealthCheck).Methods(http.MethodGet)
 
@@ -192,6 +201,12 @@ func WiringUpService(repository *repository.Repository, cache *redis.Pool, logge
 	orderDetailService := service.NewOrderDetailService(repository.OrderDetail, logger)
 	svc.SetOrderDetailService(orderDetailService)
 
+	restockService := service.NewRestockService(repository.Restock, repository.Product, logger)
+	svc.SetRestockService(restockService)
+
+	soldService := service.NewSoldService(repository.Sold, repository.Product, logger)
+	svc.SetSoldService(soldService)
+
 	return svc, nil
 }
 
@@ -213,6 +228,12 @@ func WiringUpRepository(db *gorm.DB, cache *redis.Pool, logger *common.APILogger
 
 	orderDetailRepo := repository.NewOrderDetailRepository(option)
 	repo.SetOrderDetailRepository(orderDetailRepo)
+
+	restockRepository := repository.NewRestockRepository(option)
+	repo.SetRestockRepository(restockRepository)
+
+	soldRepository := repository.NewSoldRepository(option)
+	repo.SetSoldRepository(soldRepository)
 
 	return repo
 }

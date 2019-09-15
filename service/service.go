@@ -21,6 +21,8 @@ type Service struct {
 	Product     IProductService
 	Order       IOrderService
 	OrderDetail IOrderDetailService
+	Restock     IRestockService
+	Sold        ISoldService
 }
 
 func NewService() *Service {
@@ -41,4 +43,12 @@ func (s *Service) SetOrderService(os IOrderService) {
 
 func (s *Service) SetOrderDetailService(ods IOrderDetailService) {
 	s.OrderDetail = ods
+}
+
+func (s *Service) SetRestockService(rs IRestockService) {
+	s.Restock = rs
+}
+
+func (s *Service) SetSoldService(ss ISoldService) {
+	s.Sold = ss
 }

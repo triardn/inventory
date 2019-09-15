@@ -47,3 +47,29 @@ func (pr *ProductRepository) UpdateProduct(product *model.Product, payload map[s
 
 	return
 }
+
+func (pr *ProductRepository) GetProductIDBySKU(sku string) (productID uint64, err error) {
+	product := model.Product{}
+
+	err = pr.DB.
+		Select("id").
+		Where("sku = ?", sku).
+		Find(&product).
+		Error
+	if err != nil {
+		return
+	}
+
+	return product.ID, nil
+}
+
+func (pr *ProductRepository) CreateProduct(product model.Product) (model.Product, error) {
+	err := pr.DB.
+		Create(&product).
+		Error
+	if err != nil {
+		return model.Product{}, err
+	}
+
+	return product, nil
+}

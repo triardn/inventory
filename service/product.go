@@ -29,3 +29,11 @@ func (prs *ProductService) GetProductDetail(id uint64) (oroduct model.Product, e
 func (prs *ProductService) UpdateProduct(product *model.Product, payload map[string]interface{}) (err error) {
 	return prs.repository.UpdateProduct(product, payload)
 }
+
+func (prs *ProductService) GetProductIDBySKU(sku string) (uint64, error) {
+	return prs.repository.GetProductIDBySKU(sku)
+}
+
+func (prs *ProductService) CreateProduct(product model.Product) (model.Product, error) {
+	return prs.repository.CreateProduct(product)
+}

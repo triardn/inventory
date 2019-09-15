@@ -10,7 +10,7 @@ type Product struct {
 	ID       uint64 `gorm:"column:id"`
 	Sku      string `gorm:"column:sku"`
 	Name     string `gorm:"column:name"`
-	Quantity int    `gorm:"column:quantity"`
+	Quantity int64  `gorm:"column:quantity"`
 	Created  int64  `gorm:"column:created"`
 	Updated  int64  `gorm:"column:updated"`
 }

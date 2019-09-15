@@ -20,6 +20,8 @@ type Repository struct {
 	Product     IProductRepository
 	Order       IOrderRepository
 	OrderDetail IOrderDetailRepository
+	Restock     IRestockRepository
+	Sold        ISoldRepository
 }
 
 func NewRepository() *Repository {
@@ -40,4 +42,12 @@ func (r *Repository) SetOrderRepository(orderRepository IOrderRepository) {
 
 func (r *Repository) SetOrderDetailRepository(orderDetailRepository IOrderDetailRepository) {
 	r.OrderDetail = orderDetailRepository
+}
+
+func (r *Repository) SetRestockRepository(restockRepository IRestockRepository) {
+	r.Restock = restockRepository
+}
+
+func (r *Repository) SetSoldRepository(soldRepository ISoldRepository) {
+	r.Sold = soldRepository
 }
