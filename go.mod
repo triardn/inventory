@@ -12,5 +12,6 @@ require (
 	github.com/spf13/cobra v0.0.3
 	github.com/spf13/viper v1.3.2
 	github.com/urfave/negroni v1.0.0
+	golang.org/x/text v0.3.1-0.20180807135948-17ff2d5776d2
 	gopkg.in/asaskevich/govalidator.v4 v4.0.0-20160518190739-766470278477
 )

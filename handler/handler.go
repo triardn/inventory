@@ -38,15 +38,6 @@ type HttpHandler struct {
 }
 
 func (h HttpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-
-	//w.Header().Add("Access-Control-Allow-Origin", "*")
-	//w.Header().Add("Access-Control-Allow-Headers", "Content-Type,access-control-allow-origin, access-control-allow-headers")
-
-	// Stop here if its Preflighted OPTIONS request
-	if r.Method == "OPTIONS" {
-		return
-	}
-
 	err := h.H(w, r)
 	if err != nil {
 		h.Logger.HandleErrorWithTrace(err)

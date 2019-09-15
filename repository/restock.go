@@ -37,3 +37,22 @@ func (rr *RestockRepository) CreateRestockData(restock model.Restock) (model.Res
 
 	return restock, nil
 }
+
+func (rr *RestockRepository) GetAveragePriceByProductID(productID uint64) int {
+	var result ResultFloat
+	err := rr.DB.
+		Table("Restock").
+		Select("SUM(total) as total, SUM(received_quantity) as qty").
+		Where("product_id = ?", productID).
+		Scan(&result).
+		Error
+	if err != nil {
+		return 0
+	}
+
+	if result.Total != 0 && result.Qty != 0 {
+		return int(result.Total) / result.Qty
+	}
+
+	return 0
+}

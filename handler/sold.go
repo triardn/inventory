@@ -90,7 +90,7 @@ func (h *Handler) CreateSoldProductData(w http.ResponseWriter, r *http.Request) 
 
 	productID, err := h.Service.Product.GetProductIDBySKU(request.ProductSku)
 	if err != nil {
-		if err != gorm.ErrRecordNotFound {
+		if err == gorm.ErrRecordNotFound {
 			return StatusError{Code: http.StatusBadRequest, Err: err}
 		} else {
 			return StatusError{Code: http.StatusInternalServerError, Err: err}

@@ -15,6 +15,8 @@ type IProductRepository interface {
 	UpdateProduct(product *model.Product, payload map[string]interface{}) (err error)
 	GetProductIDBySKU(sku string) (productID uint64, err error)
 	CreateProduct(product model.Product) (model.Product, error)
+	GetTotalSku() (totalSku int)
+	GetTotalStock() int
 }
 
 type IOrderRepository interface {
@@ -31,6 +33,7 @@ type IOrderDetailRepository interface {
 type IRestockRepository interface {
 	GetAllRestockData() (restock []model.Restock, err error)
 	CreateRestockData(restock model.Restock) (model.Restock, error)
+	GetAveragePriceByProductID(productID uint64) int
 }
 
 type ISoldRepository interface {

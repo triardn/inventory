@@ -15,6 +15,8 @@ type IProductService interface {
 	UpdateProduct(product *model.Product, payload map[string]interface{}) (err error)
 	GetProductIDBySKU(sku string) (uint64, error)
 	CreateProduct(product model.Product) (model.Product, error)
+	PopulateExportData() (data [][]string, grandTotalPrice int64, err error)
+	ProductStatistics() map[string]int
 }
 
 type IOrderService interface {

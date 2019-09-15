@@ -1,12 +1,17 @@
 package handler
 
 import (
+	"encoding/csv"
 	"encoding/json"
+	"io"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"strconv"
+	"time"
 
 	"github.com/gorilla/mux"
+	"github.com/triardn/inventory/common"
 	"github.com/triardn/inventory/model"
 )
 
@@ -186,6 +191,53 @@ func (h *Handler) UpdateProduct(w http.ResponseWriter, r *http.Request) (hErr er
 
 	w.WriteHeader(http.StatusOK)
 	w.Write(resp)
+
+	return nil
+}
+
+func (h *Handler) ExportProduct(w http.ResponseWriter, r *http.Request) (hErr error) {
+	data, total, err := h.Service.Product.PopulateExportData()
+	if err != nil {
+		return StatusError{Code: http.StatusInternalServerError, Err: err}
+	}
+
+	statistics := h.Service.Product.ProductStatistics()
+
+	header := [][]string{
+		{"LAPORAN NILAI BARANG"},
+		{""},
+		{"Tanggal Cetak", time.Now().Format("02 January 2006")},
+		{"Jumlah SKU", strconv.Itoa(statistics["sku"])},
+		{"Jumlah Total Barang", strconv.Itoa(statistics["stock"])},
+		{"Total Nilai", common.FormatCurrency("id_ID", total, true)},
+		{""},
+		{"SKU", "Nama Item", "Jumlah", "Rata-Rata Harga Beli", "Total"},
+	}
+
+	for _, d := range data {
+		header = append(header, d)
+	}
+
+	fileName := "Laporan Nilai Barang - " + time.Now().Format("02 January 2006") + ".csv"
+	csvfile, err := os.Create(fileName)
+	if err != nil {
+		return StatusError{Code: http.StatusInternalServerError, Err: err}
+	}
+	defer csvfile.Close()
+
+	writer := csv.NewWriter(csvfile)
+
+	err = writer.WriteAll(header) // flush everything into csvfile
+	if err != nil {
+		return StatusError{Code: http.StatusInternalServerError, Err: err}
+	}
+
+	Openfile, err := os.Open(fileName)
+	w.Header().Set("Content-Disposition", "attachment; filename="+fileName)
+	w.Header().Set("Content-Type", "text/csv")
+
+	//Send the file
+	io.Copy(w, Openfile)
 
 	return nil
 }
