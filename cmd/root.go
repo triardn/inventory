@@ -139,7 +139,7 @@ func InitApp() {
 
 	// order
 	r.Handle("/orders", handler.HttpHandler{logger, urlHandler.GetAllOrder}).Methods(http.MethodGet)
-	r.Handle("/orders/{id}", handler.HttpHandler{logger, urlHandler.GetOrderByID}).Methods(http.MethodGet)
+	r.Handle("/orders/{id}", handler.HttpHandler{logger, urlHandler.GetOrder}).Methods(http.MethodGet)
 
 	// order detail
 	r.Handle("/order-details", handler.HttpHandler{logger, urlHandler.GetAllOrderDetail}).Methods(http.MethodGet)

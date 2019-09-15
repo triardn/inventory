@@ -18,7 +18,7 @@ type IProductRepository interface {
 type IOrderRepository interface {
 	GetAllOrder() (orders []model.Order, err error)
 	GetOrderByID(id uint64) (order model.Order, err error)
-	GetOrderByInvoice(invoice string) (order model.Order, err error)
+	GetOrderIDByInvoice(invoice string) (orderID uint64, err error)
 }
 
 type IOrderDetailRepository interface {

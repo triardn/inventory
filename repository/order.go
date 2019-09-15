@@ -38,8 +38,11 @@ func (or *OrderRepository) GetOrderByID(id uint64) (order model.Order, err error
 	return
 }
 
-func (or *OrderRepository) GetOrderByInvoice(invoice string) (order model.Order, err error) {
+func (or *OrderRepository) GetOrderIDByInvoice(invoice string) (orderID uint64, err error) {
+	order := model.Order{}
+
 	err = or.DB.
+		Select("id").
 		Where("invoice = ?", invoice).
 		Find(&order).
 		Error
@@ -47,5 +50,5 @@ func (or *OrderRepository) GetOrderByInvoice(invoice string) (order model.Order,
 		return
 	}
 
-	return
+	return order.ID, nil
 }

@@ -26,6 +26,6 @@ func (os *OrderService) GetOrderByID(id uint64) (order model.Order, err error) {
 	return os.repository.GetOrderByID(id)
 }
 
-func (os *OrderService) GetOrderByInvoice(invoice string) (order model.Order, err error) {
-	return os.repository.GetOrderByInvoice(invoice)
+func (os *OrderService) GetOrderIDByInvoice(invoice string) (orderID uint64, err error) {
+	return os.repository.GetOrderIDByInvoice(invoice)
 }

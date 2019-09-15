@@ -84,11 +84,14 @@ func (h *Handler) GetAllOrder(w http.ResponseWriter, r *http.Request) (hErr erro
 	return nil
 }
 
-func (h *Handler) GetOrderByID(w http.ResponseWriter, r *http.Request) (hErr error) {
+func (h *Handler) GetOrder(w http.ResponseWriter, r *http.Request) (hErr error) {
 	vars := mux.Vars(r)
 	id, err := strconv.ParseUint(vars["id"], 10, 64)
 	if err != nil {
-		return StatusError{Code: http.StatusBadRequest, Err: err}
+		id, err = h.Service.Order.GetOrderIDByInvoice(vars["id"])
+		if err != nil {
+			return StatusError{Code: http.StatusBadRequest, Err: err}
+		}
 	}
 
 	order, err := h.Service.Order.GetOrderByID(id)
