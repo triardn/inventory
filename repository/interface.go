@@ -11,4 +11,5 @@ type IPersonRepository interface {
 
 type IProductRepository interface {
 	GetAllProduct() (products []model.Product, err error)
+	GetProductDetail(id uint64) (product model.Product, err error)
 }

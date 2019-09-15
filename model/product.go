@@ -1,7 +1,7 @@
 package model
 
 type Product struct {
-	ID        int    `gorm:"column:id"`
+	ID        uint64 `gorm:"column:id"`
 	Sku       string `gorm:"column:sku"`
 	Name      string `gorm:"column:name"`
 	Quantity  int    `gorm:"column:quantity"`

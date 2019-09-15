@@ -21,3 +21,7 @@ func NewProductService(productRepository repository.IProductRepository, logger *
 func (prs *ProductService) GetAllProduct() (products []model.Product, err error) {
 	return prs.repository.GetAllProduct()
 }
+
+func (prs *ProductService) GetProductDetail(id uint64) (oroduct model.Product, err error) {
+	return prs.repository.GetProductDetail(id)
+}

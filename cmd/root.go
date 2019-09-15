@@ -131,6 +131,7 @@ func InitApp() {
 	r := mux.NewRouter()
 
 	r.Handle("/products", handler.HttpHandler{logger, urlHandler.GetAllProduct}).Methods(http.MethodGet)
+	r.Handle("/products/{id}", handler.HttpHandler{logger, urlHandler.GetProductDetail}).Methods(http.MethodGet)
 	r.HandleFunc("/health_check", urlHandler.HealthCheck).Methods(http.MethodGet)
 
 	n := negroni.Classic()

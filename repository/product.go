@@ -25,3 +25,16 @@ func (pr *ProductRepository) GetAllProduct() (products []model.Product, err erro
 
 	return
 }
+
+func (pr *ProductRepository) GetProductDetail(id uint64) (product model.Product, err error) {
+	err = pr.DB.
+		Where("id = ?", id).
+		Find(&product).
+		Error
+
+	if err != nil {
+		return
+	}
+
+	return
+}
