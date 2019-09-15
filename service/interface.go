@@ -12,4 +12,5 @@ type IPersonService interface {
 type IProductService interface {
 	GetAllProduct() (products []model.Product, err error)
 	GetProductDetail(id uint64) (oroduct model.Product, err error)
+	UpdateProduct(product *model.Product, payload map[string]interface{}) (err error)
 }

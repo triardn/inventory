@@ -25,3 +25,7 @@ func (prs *ProductService) GetAllProduct() (products []model.Product, err error)
 func (prs *ProductService) GetProductDetail(id uint64) (oroduct model.Product, err error) {
 	return prs.repository.GetProductDetail(id)
 }
+
+func (prs *ProductService) UpdateProduct(product *model.Product, payload map[string]interface{}) (err error) {
+	return prs.repository.UpdateProduct(product, payload)
+}

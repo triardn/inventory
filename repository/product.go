@@ -38,3 +38,12 @@ func (pr *ProductRepository) GetProductDetail(id uint64) (product model.Product,
 
 	return
 }
+
+func (pr *ProductRepository) UpdateProduct(product *model.Product, payload map[string]interface{}) (err error) {
+	err = pr.DB.
+		Model(&product).
+		Updates(payload).
+		Error
+
+	return
+}
