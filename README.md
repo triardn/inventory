@@ -15,7 +15,7 @@ Running it then should be as simple as:
 $ make build
 ```
 
-or you can just use this command:
+or if you too lazy to duplicate the `inventory.toml.sample` file, you can just use this command:
 
 ```console
 $ make start-dev
