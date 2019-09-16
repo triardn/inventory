@@ -10,21 +10,8 @@ port = 8081
 # username = "username"
 # password = "password"
 # name = "mydatabase"
-additional_parameters = "charset=utf8&parseTime=True&loc=Asia%2fJakarta&time_zone=%27%2B07%3A00%27"
-max_open_connection = 280
-max_idle_connection = 20
-connection_max_lifetime = 0
-
-[cache]
-host = "127.0.0.1"
-port = 6379
-dial_connect_timeout = 5
-read_timeout = 5
-write_timeout = 5
-max_idle = 700
-max_active = 1000
-idle_timeout = 60 # seconds
-wait = true
-max_conn_lifetime = 0 # seconds
-namespace = "1"
-password = "password"
+# additional_parameters = "charset=utf8&parseTime=True&loc=Asia%2fJakarta&time_zone=%27%2B07%3A00%27"
+# max_open_connection = 280
+# max_idle_connection = 20
+# connection_max_lifetime = 0
+path_to_db = "./inventory.db"

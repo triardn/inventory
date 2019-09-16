@@ -10,7 +10,6 @@ import (
 	homedir "github.com/mitchellh/go-homedir"
 	log "github.com/sirupsen/logrus"
 
-	"github.com/gomodule/redigo/redis"
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
 	"github.com/spf13/cobra"
@@ -97,10 +96,10 @@ func InitApp() {
 		log.Fatalf("Config error : %s", err)
 	}
 
-	cache, err := driver.NewCache(config.GetCacheOption())
-	if err != nil {
-		log.Fatalf("%s : %v", "Cache error", err)
-	}
+	// cache, err := driver.NewCache(config.GetCacheOption())
+	// if err != nil {
+	// 	log.Fatalf("%s : %v", "Cache error", err)
+	// }
 
 	db, err := driver.NewSqliteDatabase(config.GetPathToDBSqlite())
 	if err != nil {
@@ -120,9 +119,9 @@ func InitApp() {
 
 	logger := common.NewAPILogger(stdOutLogger, stdErrLogger)
 
-	repo := WiringUpRepository(db, cache, logger, config)
+	repo := WiringUpRepository(db, logger, config)
 
-	service, err := WiringUpService(repo, cache, logger, config)
+	service, err := WiringUpService(repo, logger, config)
 	if err != nil {
 		panic(err)
 	}
@@ -191,7 +190,7 @@ func InitApp() {
 	stdOutLogger.Printf("Bye. \n")
 }
 
-func WiringUpService(repository *repository.Repository, cache *redis.Pool, logger *common.APILogger, appConfig *config.Config) (*service.Service, error) {
+func WiringUpService(repository *repository.Repository, logger *common.APILogger, appConfig *config.Config) (*service.Service, error) {
 	svc := service.NewService()
 
 	personService := service.NewPersonService(repository.Person, logger)
@@ -215,12 +214,11 @@ func WiringUpService(repository *repository.Repository, cache *redis.Pool, logge
 	return svc, nil
 }
 
-func WiringUpRepository(db *gorm.DB, cache *redis.Pool, logger *common.APILogger, appConfig *config.Config) *repository.Repository {
+func WiringUpRepository(db *gorm.DB, logger *common.APILogger, appConfig *config.Config) *repository.Repository {
 	repo := repository.NewRepository()
 
 	option := repository.RepositoryOption{
 		DB:        db,
-		Cache:     cache,
 		Logger:    logger,
 		AppConfig: appConfig,
 	}
