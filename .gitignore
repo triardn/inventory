@@ -1,6 +1,7 @@
 bin
 *.log
 vendor
+inventory
 .inventory.toml
 inventory.toml
 .DS_STORE
