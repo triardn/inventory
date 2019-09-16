@@ -1,0 +1,365 @@
+{
+	"info": {
+		"_postman_id": "531e3909-8c8d-47b1-8ccf-880a3844a400",
+		"name": "Inventory (Sorabel Tech Assignment)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Product",
+			"item": [
+				{
+					"name": "Get All Product",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Detail Product",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/products/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"products",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Detail Product",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"sku\": \"SSI-D00791015-LL-BWH\",\n\t\"name\": \"Zalekia Plain Casual Blouse (L,Broken White)\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8081/products/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"products",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Product",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"sku\": \"SSI-D01401050-MM-REDXX\",\n\t\"name\": \"Zeomila Zipper Casual Blouse (M,Red Dead Redemption)\",\n\t\"quantity\": 18\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8081/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Export Product",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/products/export",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"products",
+								"export"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Order",
+			"item": [
+				{
+					"name": "Get All Order",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/orders",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Order (by ID or Invoice)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/orders/ID-20171201-009890",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"orders",
+								"ID-20171201-009890"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Order Detail",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/order-details",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"order-details"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Export All Order",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/orders/export?start=2019-09-14&end=2019-09-14",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"orders",
+								"export"
+							],
+							"query": [
+								{
+									"key": "start",
+									"value": "2019-09-14"
+								},
+								{
+									"key": "end",
+									"value": "2019-09-14"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Order",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"invoice\": \"ID-20190916-011124\",\n\t\"notes\": \"Duar duar duar\",\n\t\"detail\": [\n\t\t{\n\t\t\t\"product_id\": 1,\n\t\t\t\"price\": 160000,\n\t\t\t\"quantity\": 4\n\t\t},\n\t\t{\n\t\t\t\"product_id\": 2,\n\t\t\t\"price\": 100000,\n\t\t\t\"quantity\": 1\n\t\t},\n\t\t{\n\t\t\t\"product_id\": 3,\n\t\t\t\"price\": 200000,\n\t\t\t\"quantity\": 2\n\t\t}\n\t]\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8081/orders",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Restock",
+			"item": [
+				{
+					"name": "Get All Restock Trx",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/restocks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"restocks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Restock Data",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"product_sku\": \"SSI-D00791015-LL-BWHXX\",\n\t\"product_name\": \"Zalekia Plain Casual Blouse (L,Broken White Light Saber)\",\n\t\"ordered_quantity\": 100,\n\t\"received_quantity\": 100,\n\t\"price\": 100000,\n\t\"receipt_number\": \"\",\n\t\"notes\": \"\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8081/restocks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"restocks"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Sold",
+			"item": [
+				{
+					"name": "Get All Sold Product",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/solds",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"solds"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Sold Product Data",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"product_sku\": \"SSI-D00791077-MM-BWHXXXXXXXXSSDDEEDDSSS\",\n\t\"quantity\": 12,\n\t\"price\": 125000,\n\t\"notes\": \"kiwww\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8081/solds",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"solds"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

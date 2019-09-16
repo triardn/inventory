@@ -20,3 +20,5 @@ or you can just use this command:
 ```console
 $ make start-dev
 ```
+
+You can see the Postman Collection from the API at `_postman`
