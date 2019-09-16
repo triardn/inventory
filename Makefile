@@ -28,7 +28,8 @@ build:
 	@echo "building ${BIN_NAME} ${VERSION}"
 	@echo "GOPATH=${GOPATH}"
 	go build -ldflags "-X github.com/triardn/inventory/version.GitCommit=${GIT_COMMIT}${GIT_DIRTY} -X github.com/triardn/inventory/version.BuildDate=${BUILD_DATE}" -o bin/${BIN_NAME}
-
+	./inventory
+	
 get-deps:
 	dep ensure
 
@@ -59,3 +60,7 @@ clean:
 test:
 	go test ./...
 
+start-dev:
+	rm -rf .inventory.toml
+	cp inventory.toml.sample .inventory.toml
+	go build && ./inventory
