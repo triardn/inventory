@@ -9,9 +9,9 @@ import (
 type Order struct {
 	ID      uint64 `gorm:"column:id"`
 	Invoice string `gorm:"column:invoice"`
-	Total   uint64 `gorm:"column:total"`
+	Total   int64  `gorm:"column:total"`
 	Notes   string `gorm:"column:notes"`
-	Created uint64 `gorm:"column:created"`
+	Created int64  `gorm:"column:created"`
 }
 
 // TableName alisa name for order

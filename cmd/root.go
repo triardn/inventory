@@ -132,6 +132,7 @@ func InitApp() {
 	r := mux.NewRouter()
 
 	r.Handle("/products/export", handler.HttpHandler{logger, urlHandler.ExportProduct}).Methods(http.MethodGet)
+	r.Handle("/orders/export", handler.HttpHandler{logger, urlHandler.ExportOrder}).Methods(http.MethodGet)
 
 	r.Use(middleware.CommonHeaderMiddleware)
 
@@ -198,7 +199,7 @@ func WiringUpService(repository *repository.Repository, cache *redis.Pool, logge
 	productService := service.NewProductService(repository.Product, repository.Restock, logger)
 	svc.SetProductService(productService)
 
-	orderService := service.NewOrderService(repository.Order, logger)
+	orderService := service.NewOrderService(repository.Order, repository.OrderDetail, repository.Restock, logger)
 	svc.SetOrderService(orderService)
 
 	orderDetailService := service.NewOrderDetailService(repository.OrderDetail, logger)

@@ -1,19 +1,25 @@
 package handler
 
 import (
+	"encoding/csv"
 	"encoding/json"
+	"fmt"
+	"io"
 	"net/http"
+	"os"
 	"strconv"
+	"time"
 
 	"github.com/gorilla/mux"
+	"github.com/triardn/inventory/common"
 )
 
 type OrderResponse struct {
 	ID          uint64        `json:"id"`
 	Invoice     string        `json:"invoice"`
-	Total       uint64        `json:"total"`
+	Total       int64         `json:"total"`
 	Notes       string        `json:"notes"`
-	Created     uint64        `json:"created"`
+	Created     int64         `json:"created"`
 	OrderDetail []OrderDetail `json:"order_detail"`
 }
 
@@ -21,11 +27,11 @@ type OrderDetail struct {
 	ID       uint64 `json:"id"`
 	ItemSku  string `json:"item_sku"`
 	ItemName string `json:"item_name"`
-	Price    uint64 `json:"price"`
-	Quantity uint64 `json:"quantity"`
-	Total    uint64 `json:"total"`
+	Price    int64  `json:"price"`
+	Quantity int64  `json:"quantity"`
+	Total    int64  `json:"total"`
 	Notes    string `json:"notes,omitempty"`
-	Created  uint64 `json:"created,omitempty"`
+	Created  int64  `json:"created,omitempty"`
 }
 
 func (h *Handler) GetAllOrder(w http.ResponseWriter, r *http.Request) (hErr error) {
@@ -135,6 +141,65 @@ func (h *Handler) GetOrder(w http.ResponseWriter, r *http.Request) (hErr error) 
 
 	w.WriteHeader(http.StatusOK)
 	w.Write(resp)
+
+	return nil
+}
+
+func (h *Handler) ExportOrder(w http.ResponseWriter, r *http.Request) (hErr error) {
+	dateStart := r.URL.Query().Get("start")
+	dateEnd := r.URL.Query().Get("end")
+
+	layout := "2006-01-02"
+
+	start, _ := time.Parse(layout, dateStart)
+	end, _ := time.Parse(layout, dateEnd)
+
+	data, totalProfit, err := h.Service.Order.PopulateExportData(dateStart, dateEnd)
+	if err != nil {
+		return StatusError{Code: http.StatusInternalServerError, Err: err}
+	}
+
+	stats := h.Service.Order.ReportStatistics(dateStart, dateEnd)
+
+	rangeTime := fmt.Sprintf("%s - %s", start.Format("02 January 2006"), end.Format("02 January 2006"))
+
+	header := [][]string{
+		{"LAPORAN PENJUALAN"},
+		{""},
+		{"Tanggal Cetak", time.Now().Format("02 January 2006")},
+		{"Tanggal", rangeTime},
+		{"Total Omzet", common.FormatCurrency("id_ID", stats["turnover"], true)},
+		{"Total Laba Kotor", common.FormatCurrency("id_ID", totalProfit, true)},
+		{"Total Penjualan", strconv.FormatInt(stats["orderCount"], 10)},
+		{"Total Barang", strconv.FormatInt(stats["productCount"], 10)},
+		{""},
+		{"ID Pesanan", "Waktu", "SKU", "Nama Barang", "Jumlah", "Harga Jual", "Total", "Harga Beli", "Laba"},
+	}
+
+	for _, d := range data {
+		header = append(header, d)
+	}
+
+	fileName := "Laporan Penjualan - " + rangeTime + ".csv"
+	csvfile, err := os.Create(fileName)
+	if err != nil {
+		return StatusError{Code: http.StatusInternalServerError, Err: err}
+	}
+	defer csvfile.Close()
+
+	writer := csv.NewWriter(csvfile)
+
+	err = writer.WriteAll(header) // flush everything into csvfile
+	if err != nil {
+		return StatusError{Code: http.StatusInternalServerError, Err: err}
+	}
+
+	Openfile, err := os.Open(fileName)
+	w.Header().Set("Content-Disposition", "attachment; filename="+fileName)
+	w.Header().Set("Content-Type", "text/csv")
+
+	//Send the file
+	io.Copy(w, Openfile)
 
 	return nil
 }

@@ -10,10 +10,10 @@ type OrderDetail struct {
 	ID        uint64 `gorm:"column:id"`
 	OrderID   uint64 `gorm:"column:order_id"`
 	ProductID uint64 `gorm:"column:product_id"`
-	Price     uint64 `gorm:"column:price"`
-	Quantity  uint64 `gorm:"column:quantity"`
-	Total     uint64 `gorm:"column:total"`
-	Created   uint64 `gorm:"column:created"`
+	Price     int64  `gorm:"column:price"`
+	Quantity  int64  `gorm:"column:quantity"`
+	Total     int64  `gorm:"column:total"`
+	Created   int64  `gorm:"column:created"`
 	Order     Order
 	Product   Product
 }

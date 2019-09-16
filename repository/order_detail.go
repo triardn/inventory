@@ -40,3 +40,18 @@ func (odr *OrderDetailRepository) GetDetailByOrderID(orderID uint64) (orderDetai
 
 	return
 }
+
+func (odr *OrderDetailRepository) GetTotalOrderedProduct(start int64, end int64) int64 {
+	var result Result
+	err := odr.DB.
+		Table("order_detail").
+		Select("SUM(quantity) as total").
+		Where("created between ? and ?", start, end).
+		Scan(&result).
+		Error
+	if err != nil {
+		return 0
+	}
+
+	return int64(result.Total)
+}

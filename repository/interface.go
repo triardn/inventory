@@ -21,13 +21,17 @@ type IProductRepository interface {
 
 type IOrderRepository interface {
 	GetAllOrder() (orders []model.Order, err error)
+	GetAllOrderWithTimeFrame(start int64, end int64) (orders []model.Order, err error)
 	GetOrderByID(id uint64) (order model.Order, err error)
 	GetOrderIDByInvoice(invoice string) (orderID uint64, err error)
+	GetTotalTurnover(start int64, end int64) int64
+	GetCountOrder(start int64, end int64) int64
 }
 
 type IOrderDetailRepository interface {
 	GetAllOrderDetail() (orderDetails []model.OrderDetail, err error)
 	GetDetailByOrderID(orderID uint64) (orderDetails []model.OrderDetail, err error)
+	GetTotalOrderedProduct(start int64, end int64) int64
 }
 
 type IRestockRepository interface {

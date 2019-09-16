@@ -26,6 +26,18 @@ func (or *OrderRepository) GetAllOrder() (orders []model.Order, err error) {
 	return
 }
 
+func (or *OrderRepository) GetAllOrderWithTimeFrame(start int64, end int64) (orders []model.Order, err error) {
+	err = or.DB.
+		Where("created between ? and ?", start, end).
+		Find(&orders).
+		Error
+	if err != nil {
+		return nil, err
+	}
+
+	return
+}
+
 func (or *OrderRepository) GetOrderByID(id uint64) (order model.Order, err error) {
 	err = or.DB.
 		Where("id = ?", id).
@@ -51,4 +63,34 @@ func (or *OrderRepository) GetOrderIDByInvoice(invoice string) (orderID uint64, 
 	}
 
 	return order.ID, nil
+}
+
+func (or *OrderRepository) GetTotalTurnover(start int64, end int64) int64 {
+	var result Result
+	err := or.DB.
+		Table("Order").
+		Select("SUM(total) as total").
+		Where("created between ? and ?", start, end).
+		Scan(&result).
+		Error
+	if err != nil {
+		return 0
+	}
+
+	return int64(result.Total)
+}
+
+func (or *OrderRepository) GetCountOrder(start int64, end int64) int64 {
+	var result int64
+	err := or.DB.
+		Table("Order").
+		Select("invoice").
+		Where("created between ? and ?", start, end).
+		Count(&result).
+		Error
+	if err != nil {
+		return 0
+	}
+
+	return result
 }
