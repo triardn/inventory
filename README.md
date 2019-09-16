@@ -1,4 +1,4 @@
-# inventory
+# Inventory
 
 A simple API for inventory
 
