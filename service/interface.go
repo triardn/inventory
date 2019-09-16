@@ -25,11 +25,14 @@ type IOrderService interface {
 	GetOrderIDByInvoice(invoice string) (orderID uint64, err error)
 	PopulateExportData(start string, end string) (data [][]string, grandTotalProfit int64, err error)
 	ReportStatistics(start string, end string) (statistics map[string]int64)
+	CreateOrder(payloadOrder model.Order) (order model.Order, err error)
+	UpdateOrder(order *model.Order, payload map[string]interface{}) (err error)
 }
 
 type IOrderDetailService interface {
 	GetAllOrderDetail() (orderDetails []model.OrderDetail, err error)
 	GetDetailByOrderID(orderID uint64) (orderDetails []model.OrderDetail, err error)
+	CreateOrderDetail(orderDetails []model.OrderDetail) ([]model.OrderDetail, error)
 }
 
 type IRestockService interface {

@@ -50,6 +50,26 @@ func (or *OrderRepository) GetOrderByID(id uint64) (order model.Order, err error
 	return
 }
 
+func (or *OrderRepository) CreateOrder(orderPayload model.Order) (model.Order, error) {
+	err := or.DB.
+		Create(&orderPayload).
+		Error
+	if err != nil {
+		return model.Order{}, err
+	}
+
+	return orderPayload, nil
+}
+
+func (or *OrderRepository) UpdateOrder(order *model.Order, payload map[string]interface{}) (err error) {
+	err = or.DB.
+		Model(&order).
+		Updates(payload).
+		Error
+
+	return
+}
+
 func (or *OrderRepository) GetOrderIDByInvoice(invoice string) (orderID uint64, err error) {
 	order := model.Order{}
 

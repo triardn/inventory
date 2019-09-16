@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/jinzhu/gorm"
+	"github.com/triardn/inventory/common"
 	"github.com/triardn/inventory/model"
 )
 
@@ -15,7 +16,6 @@ type RestockPayload struct {
 	OrderedQuantity  int64  `json:"ordered_quantity"`
 	ReceivedQuantity int64  `json:"received_quantity"`
 	Price            int64  `json:"price"`
-	Total            int64  `json:"total"`
 	ReceiptNumber    string `json:"receipt_number"`
 	Notes            string `json:"notes"`
 }
@@ -85,23 +85,19 @@ func (h *Handler) CreateRestockData(w http.ResponseWriter, r *http.Request) (hEr
 
 	// validation
 	if request.ProductSku == "" {
-		return StatusError{Code: http.StatusBadRequest, Err: err}
+		return StatusError{Code: http.StatusBadRequest, Err: common.ErrProductSkuCannotNull}
 	}
 
 	if request.OrderedQuantity == 0 {
-		return StatusError{Code: http.StatusBadRequest, Err: err}
+		return StatusError{Code: http.StatusBadRequest, Err: common.ErrProductQuantityCannotNull}
 	}
 
 	if request.ReceivedQuantity == 0 {
-		return StatusError{Code: http.StatusBadRequest, Err: err}
+		return StatusError{Code: http.StatusBadRequest, Err: common.ErrProductQuantityCannotNull}
 	}
 
 	if request.Price == 0 {
-		return StatusError{Code: http.StatusBadRequest, Err: err}
-	}
-
-	if request.Total == 0 {
-		return StatusError{Code: http.StatusBadRequest, Err: err}
+		return StatusError{Code: http.StatusBadRequest, Err: common.ErrProductPriceCannotNull}
 	}
 
 	if request.ReceiptNumber == "" {
@@ -136,7 +132,7 @@ func (h *Handler) CreateRestockData(w http.ResponseWriter, r *http.Request) (hEr
 	newRestock.OrderedQuantity = request.OrderedQuantity
 	newRestock.ReceivedQuantity = request.ReceivedQuantity
 	newRestock.Price = request.Price
-	newRestock.Total = request.Total
+	newRestock.Total = request.Price * request.OrderedQuantity
 	newRestock.ReceiptNumber = request.ReceiptNumber
 	newRestock.Notes = request.Notes
 

@@ -144,6 +144,7 @@ func InitApp() {
 
 	// order
 	r.Handle("/orders", handler.HttpHandler{logger, urlHandler.GetAllOrder}).Methods(http.MethodGet)
+	r.Handle("/orders", handler.HttpHandler{logger, urlHandler.CreateOrder}).Methods(http.MethodPost)
 	r.Handle("/orders/{id}", handler.HttpHandler{logger, urlHandler.GetOrder}).Methods(http.MethodGet)
 
 	// order detail

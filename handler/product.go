@@ -106,15 +106,15 @@ func (h *Handler) CreateProduct(w http.ResponseWriter, r *http.Request) (hErr er
 
 	// validation
 	if request.Sku == "" {
-		return StatusError{Code: http.StatusBadRequest, Err: err}
+		return StatusError{Code: http.StatusBadRequest, Err: common.ErrProductSkuCannotNull}
 	}
 
 	if request.Name == "" {
-		return StatusError{Code: http.StatusBadRequest, Err: err}
+		return StatusError{Code: http.StatusBadRequest, Err: common.ErrProductNameCannotNull}
 	}
 
 	if request.Quantity == 0 {
-		return StatusError{Code: http.StatusBadRequest, Err: err}
+		return StatusError{Code: http.StatusBadRequest, Err: common.ErrProductQuantityCannotNull}
 	}
 
 	newProduct := model.Product{}

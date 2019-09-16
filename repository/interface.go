@@ -26,12 +26,15 @@ type IOrderRepository interface {
 	GetOrderIDByInvoice(invoice string) (orderID uint64, err error)
 	GetTotalTurnover(start int64, end int64) int64
 	GetCountOrder(start int64, end int64) int64
+	CreateOrder(orderPayload model.Order) (order model.Order, err error)
+	UpdateOrder(order *model.Order, payload map[string]interface{}) (err error)
 }
 
 type IOrderDetailRepository interface {
 	GetAllOrderDetail() (orderDetails []model.OrderDetail, err error)
 	GetDetailByOrderID(orderID uint64) (orderDetails []model.OrderDetail, err error)
 	GetTotalOrderedProduct(start int64, end int64) int64
+	CreateOrderDetail(orderDetailPayload model.OrderDetail) (model.OrderDetail, error)
 }
 
 type IRestockRepository interface {

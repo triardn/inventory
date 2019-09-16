@@ -27,3 +27,8 @@ func (p *OrderDetail) BeforeCreate(scope *gorm.Scope) error {
 	scope.SetColumn("Created", time.Now().Unix())
 	return nil
 }
+
+func (od *OrderDetail) AfterCreate(tx *gorm.DB) (err error) {
+	tx.Model(od).Preload("Product").Find(od)
+	return
+}

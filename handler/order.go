@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"strconv"
@@ -12,6 +13,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/triardn/inventory/common"
+	"github.com/triardn/inventory/model"
 )
 
 type OrderResponse struct {
@@ -32,6 +34,18 @@ type OrderDetail struct {
 	Total    int64  `json:"total"`
 	Notes    string `json:"notes,omitempty"`
 	Created  int64  `json:"created,omitempty"`
+}
+
+type OrderPayload struct {
+	Invoice       string          `json:"invoice"`
+	Notes         string          `json:"notes"`
+	DetailPayload []DetailPayload `json:"detail"`
+}
+
+type DetailPayload struct {
+	ProductID uint64 `json:"product_id"`
+	Price     int64  `json:"price"`
+	Quantity  int64  `json:"quantity"`
 }
 
 func (h *Handler) GetAllOrder(w http.ResponseWriter, r *http.Request) (hErr error) {
@@ -200,6 +214,91 @@ func (h *Handler) ExportOrder(w http.ResponseWriter, r *http.Request) (hErr erro
 
 	//Send the file
 	io.Copy(w, Openfile)
+
+	return nil
+}
+
+func (h *Handler) CreateOrder(w http.ResponseWriter, r *http.Request) (hErr error) {
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		return StatusError{Code: http.StatusBadRequest, Err: err}
+	}
+
+	var request OrderPayload
+	err = json.Unmarshal(body, &request)
+	if err != nil {
+		return StatusError{Code: http.StatusBadRequest, Err: err}
+	}
+
+	// create order 1st
+	var payloadOrder model.Order
+	payloadOrder.Invoice = request.Invoice
+	payloadOrder.Notes = request.Notes
+
+	newOrder, err := h.Service.Order.CreateOrder(payloadOrder)
+	if err != nil {
+		return StatusError{Code: http.StatusInternalServerError, Err: err}
+	}
+
+	var allDetail []model.OrderDetail
+	var grandTotal int64
+	for _, detail := range request.DetailPayload {
+		var tempDetail model.OrderDetail
+		tempDetail.OrderID = newOrder.ID
+		tempDetail.ProductID = detail.ProductID
+		tempDetail.Price = detail.Price
+		tempDetail.Quantity = detail.Quantity
+		tempDetail.Total = tempDetail.Price * tempDetail.Quantity
+
+		allDetail = append(allDetail, tempDetail)
+
+		grandTotal += tempDetail.Total
+	}
+
+	allOrderDetails, err := h.Service.OrderDetail.CreateOrderDetail(allDetail)
+	if err != nil {
+		return StatusError{Code: http.StatusInternalServerError, Err: err}
+	}
+
+	// update order
+	payload := make(map[string]interface{})
+	payload["total"] = grandTotal
+	err = h.Service.Order.UpdateOrder(&newOrder, payload)
+	if err != nil {
+		return StatusError{Code: http.StatusInternalServerError, Err: err}
+	}
+
+	var detailResponses []OrderDetail
+	for _, orderDetail := range allOrderDetails {
+		var tempDetail OrderDetail
+		tempDetail.ID = orderDetail.ID
+		tempDetail.ItemSku = orderDetail.Product.Sku
+		tempDetail.ItemName = orderDetail.Product.Name
+		tempDetail.Price = orderDetail.Price
+		tempDetail.Quantity = orderDetail.Quantity
+		tempDetail.Total = orderDetail.Total
+		tempDetail.Created = orderDetail.Created
+
+		detailResponses = append(detailResponses, tempDetail)
+	}
+
+	orderResponse := OrderResponse{
+		ID:          newOrder.ID,
+		Invoice:     newOrder.Invoice,
+		Total:       newOrder.Total,
+		Notes:       newOrder.Notes,
+		Created:     newOrder.Created,
+		OrderDetail: detailResponses,
+	}
+
+	response := NewAPIResponse(orderResponse, nil)
+	resp, err := json.Marshal(response)
+	if err != nil {
+		return StatusError{Code: http.StatusInternalServerError, Err: err}
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write(resp)
 
 	return nil
 }

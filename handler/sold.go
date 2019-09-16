@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/jinzhu/gorm"
+	"github.com/triardn/inventory/common"
 	"github.com/triardn/inventory/model"
 )
 
@@ -77,15 +78,15 @@ func (h *Handler) CreateSoldProductData(w http.ResponseWriter, r *http.Request) 
 
 	// validation
 	if request.ProductSku == "" {
-		return StatusError{Code: http.StatusBadRequest, Err: err}
+		return StatusError{Code: http.StatusBadRequest, Err: common.ErrProductSkuCannotNull}
 	}
 
 	if request.Quantity == 0 {
-		return StatusError{Code: http.StatusBadRequest, Err: err}
+		return StatusError{Code: http.StatusBadRequest, Err: common.ErrProductQuantityCannotNull}
 	}
 
 	if request.Price == 0 {
-		return StatusError{Code: http.StatusBadRequest, Err: err}
+		return StatusError{Code: http.StatusBadRequest, Err: common.ErrProductPriceCannotNull}
 	}
 
 	productID, err := h.Service.Product.GetProductIDBySKU(request.ProductSku)

@@ -38,6 +38,14 @@ func (os *OrderService) GetOrderIDByInvoice(invoice string) (orderID uint64, err
 	return os.repository.GetOrderIDByInvoice(invoice)
 }
 
+func (os *OrderService) CreateOrder(payloadOrder model.Order) (order model.Order, err error) {
+	return os.repository.CreateOrder(payloadOrder)
+}
+
+func (os *OrderService) UpdateOrder(order *model.Order, payload map[string]interface{}) (err error) {
+	return os.repository.UpdateOrder(order, payload)
+}
+
 func (os *OrderService) PopulateExportData(start string, end string) (data [][]string, grandTotalProfit int64, err error) {
 	layout := "2006-01-02 15:04:05"
 	data = [][]string{}

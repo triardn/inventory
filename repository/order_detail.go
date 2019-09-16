@@ -41,6 +41,17 @@ func (odr *OrderDetailRepository) GetDetailByOrderID(orderID uint64) (orderDetai
 	return
 }
 
+func (odr *OrderDetailRepository) CreateOrderDetail(orderDetailPayload model.OrderDetail) (model.OrderDetail, error) {
+	err := odr.DB.
+		Create(&orderDetailPayload).
+		Error
+	if err != nil {
+		return model.OrderDetail{}, err
+	}
+
+	return orderDetailPayload, nil
+}
+
 func (odr *OrderDetailRepository) GetTotalOrderedProduct(start int64, end int64) int64 {
 	var result Result
 	err := odr.DB.
